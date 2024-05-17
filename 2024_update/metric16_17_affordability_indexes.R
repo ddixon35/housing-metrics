@@ -11,9 +11,11 @@ library(tidyverse)
 save_path <- "J:/Projects/V2050/Housing/Monitoring/2024Update/Data/metric16_17_affordability_indexes/metric16_17_raw.csv"
 
 # Download Data from WCRER site - will need to update link below for newer data
-url <- "https://wcrer.be.uw.edu/wp-content/uploads/sites/60/2023/02/County-Housing-Affordability-Index-Report-4Q2022.xlsx"
-mb_hai_raw = read.xlsx(url, sheet=2)
-ftb_hai_raw = read.xlsx(url, sheet=3)
+#url <- "https://wcrer.be.uw.edu/wp-content/uploads/sites/60/2023/02/County-Housing-Affordability-Index-Report-4Q2022.xlsx"
+mb_hai_raw = read.xlsx("J:/Projects/V2050/Housing/Monitoring/2024Update/Data/metric16_17_affordability_indexes/County-Housing-Affordability-Index-Report-Q4-2023.xlsx", sheet=2)
+ftb_hai_raw = read.xlsx("J:/Projects/V2050/Housing/Monitoring/2024Update/Data/metric16_17_affordability_indexes/County-Housing-Affordability-Index-Report-Q4-2023.xlsx", sheet=3)
+
+
 
 # --------------- Median Home Buyer (HAI) ---------------
 # Select County and Q1 variables
@@ -36,11 +38,11 @@ ftb_hai <- ftb_hai_raw %>% select(all_of(c(select_county,select_q1)))
 ftb_hai <- ftb_hai[ftb_hai$County %in% c("King", "Kitsap", "Pierce", "Snohomish"),]
 
 # --------------- Export to Excel ---------------
-setwd("J:/Projects/V2050/Housing/Monitoring/2023Update")
+setwd("J:/Projects/V2050/Housing/Monitoring/2024Update")
 
 work_book <- createWorkbook()
 addWorksheet(work_book, sheetName = "first_time_buyer_hai")
 writeData(work_book, "first_time_buyer_hai", ftb_hai)
 addWorksheet(work_book, sheetName = "median_buyer_hai")
 writeData(work_book, "median_buyer_hai", mb_hai)
-saveWorkbook(work_book, file = "Affordability Measures/r_output_HAI_Q1.xlsx", overwrite = TRUE)
+saveWorkbook(work_book, file = "Data/metric16_17_affordability_indexes/r_output_HAI_Q1.xlsx", overwrite = TRUE)
