@@ -194,7 +194,7 @@ disp_risk_column <- static_column_chart(t= risk_comb_mod_high,
                                         fill = "risk_level_name",
                                         pos = "stack",
                                         #moe = "share_moe",    #including moe will remove bar labels, one or the other
-                                        title = "Opportunity Index",
+                                        title = "Displacement Risk",
                                         color = "psrc_pairs") 
 
 disp_risk_column # stacked with labels
@@ -205,7 +205,7 @@ disp_risk_column_moe <- static_column_chart(t= risk_comb_mod_high,
                                         pos = "dodge",
                                         moe = "share_moe",    #including moe will remove bar labels, one or the other
                                         #dec = 1, 
-                                        title = "Opportunity Index",
+                                        title = "Displacement Risk",
                                         color = "psrc_pairs") 
 
 disp_risk_column_moe
