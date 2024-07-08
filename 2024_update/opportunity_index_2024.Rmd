@@ -118,7 +118,7 @@ opportunity_acs_22 <- merge(acs_re_new, opportunity_crosswalk,
                              cnty == 61 ~ "Snohomish"))%>%
   filter(opp_index %in% c("Very High", "High", "Moderate", "Low", "Very Low")) 
                        
-opportunity_acs_22$race_ethnicity <- factor(opportunity_acs_21$race_ethnicity,
+opportunity_acs_22$race_ethnicity <- factor(opportunity_acs_22$race_ethnicity,
                                             levels = c("AIAN",
                                                        "Asian",
                                                        "Black/African American",
@@ -128,7 +128,7 @@ opportunity_acs_22$race_ethnicity <- factor(opportunity_acs_21$race_ethnicity,
                                                        "White"))
 
 
-opportunity_acs_22_new <- subset(opportunity_acs_21, select = c("geoid20", "census_tract", "geoid10", "race_ethnicity", "cnty", "county2", 
+opportunity_acs_22_new <- subset(opportunity_acs_22, select = c("geoid20", "census_tract", "geoid10", "race_ethnicity", "cnty", "county2", 
                                                                 "count", "moe", "opp_class", "opp_index"))
 
 ```
@@ -136,7 +136,7 @@ opportunity_acs_22_new <- subset(opportunity_acs_21, select = c("geoid20", "cens
 ```{r, plot numbers with MOE}
 
 # 1. create a subset table that calculates: the total count of each race/ethnicity for the region
-acs_race_totals <- opportunity_acs_21_new %>%
+acs_race_totals <- opportunity_acs_22_new %>%
   group_by(race_ethnicity)%>%
   summarise(count=sum(count),
             count_moe=(moe_sum(moe, count))) %>%
@@ -150,7 +150,7 @@ acs_race_totals <- opportunity_acs_21_new %>%
   filter(race_ethnicity !="White Total")
 
 # 2a. create a table with the race/ethnicity for each opportunity index rating
-acs_race_opp <- opportunity_acs_21_new %>%
+acs_race_opp <- opportunity_acs_22_new %>%
   group_by(race_ethnicity, opp_index)%>%
   summarise(count=sum(count),
             count_moe=(moe_sum(moe, count)))
@@ -161,10 +161,14 @@ acs_low_verylow <- subset(acs_race_opp, opp_index == "Low" | opp_index == "Very 
 # 2c. combine the totals for the region and table 2b. so that you can calculate the MOE for each race/ethnicity
 ## NOTE: when pulling in new data, you will need to change the numbers to reflect new table 1. values ##
 acs_comb_low_verylow <- acs_low_verylow %>%
-  add_column(total_region_count_RE = rep(c(24915, 575205, 228599, 427696, 33750, 568423, 2552260), each = 2), 
+  add_column(total_region_count_RE = rep(c(25452, 599211, 234085, 439037, 35345, 596400, 2525292), each = 2), 
              .after = 'count_moe')
 
-# 3. calculate share_moe
+# 3a. calculate share of low and very low for each race/ethniciy
+
+acs_comb_low_verylow$share <- acs_comb_low_verylow$count/acs_comb_low_verylow$total_region_count_RE
+
+# 3b. calculate share_moe
 
 acs_comb_low_verylow$share_moe <- acs_comb_low_verylow$count_moe/acs_comb_low_verylow$total_region_count_RE
   
@@ -198,7 +202,7 @@ opp_index_column_moe
 ```{r, write to excel, eval = FALSE}
 # can change the output path when updating yearly information
 
-setwd("J:/Projects/V2050/Housing/Monitoring/2023Update")
+setwd("J:/Projects/V2050/Housing/Monitoring/2024Update/Data/metric06_access_to_opp_by_race")
 
-write.csv(opportunity_acs_21_new, "Opportunity Map - ACS/r_output 2021 5YR_trial.csv", row.names=FALSE)
+write.csv(opportunity_acs_22_new, "r_output 2022 5YR_ACS_opportunity.csv", row.names=FALSE)
 ```
