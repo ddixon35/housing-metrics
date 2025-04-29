@@ -1,7 +1,7 @@
 # TITLE: Home Value & Rent 
 # GEOGRAPHIES: Seattle MSA
 # DATA SOURCE: Zillow, OFM, 1YR ACS PUMS
-# DATE MODIFIED: 8.27.2024
+# DATE MODIFIED: 4.09.2025
 # AUTHOR: Eric Clute
 
 library(openxlsx)
@@ -19,20 +19,21 @@ library(psrchousing)
 #  ZHVI: Zillow Home Value Index - All Homes (SFR & Condo) Time series, Smoothed, Seasonally-Adjusted
 #  ZORI: Zillow Observed Rent Index - All Homes + Multifamily, Smoothed, Seasonally-Adjusted
 
-export_path <- "J:/Projects/V2050/Housing/Monitoring/2024Update/Data/metric12-13_metro_area_rent_home_value"
+export_path <- "J:/Projects/V2050/Housing/Monitoring/2025Update/data/metric12-13_metro_area_rent_home_value"
 ZHVI_url <- "https://files.zillowstatic.com/research/public_csvs/zhvi/Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv"
 ZORI_url <- "https://files.zillowstatic.com/research/public_csvs/zori/Metro_zori_uc_sfrcondomfr_sm_sa_month.csv?t=1711667054"
 
 ofm_inc_url <- "https://ofm.wa.gov/sites/default/files/public/dataresearch/economy/median_household_income_estimates.xlsx"
 ofm_inc_file <- "median_household_income_estimates.xlsx"
 
-years <- c(2015,2016,2017,2018,2019,2021,2022)
+years <- c(2015,2016,2017,2018,2019,2021,2022,2023)
 counties <- c("King", "Pierce", "Snohomish")
+dir <- "J:/Projects/Census/AmericanCommunitySurvey/Data/PUMS/pums_rds"
 
 # ---------------- Functions ------------------
 pull_data <- function(years){
   # returns a list of get_psrc_pums outputs, one for each year
-  lapply(years, function(x) get_psrc_pums(1, x, "h",c("HINCP","TEN")))
+  lapply(years, function(x) get_psrc_pums(1, x, "h",c("HINCP","TEN"), dir = dir))
  }
 
 inc_clean_func_tenure <- function(hh_inc){
